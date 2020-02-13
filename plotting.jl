@@ -28,11 +28,16 @@ Xc = (ac + dagger(ac)); Yc = -1*im*(ac - dagger(ac)); Zc = (Iqc - 2*dagger(ac)*a
 T = 0:0.01:100
 
 #@load "/home/vamsi/Github/cavity_qubit_system/data 5,9,100.0.jld2" exp_nc_average
-file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 5,99,100.0.jld2", "r")
-exp_nc = file["_exp_nc"]
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/Data/data 5,49,100.0,700.jld2", "r")
+exp_nc_1 = file["_exp_nc"]
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/Data/data 5,49,100.0,800.jld2", "r")
+exp_nc_2 = file["_exp_nc"]
 pygui(true)
 figure()
-plot(T, exp_nc)
+plot(T, exp_nc_1, label="700")
+plot(T, exp_nc_2, label="800")
 grid("on")
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Photon number}")
+title("5,49")
+legend(loc="upper left")
