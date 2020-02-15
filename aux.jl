@@ -1,15 +1,17 @@
-@everywhere function instate(nq,qub_amp=0,nc,cav_amp=0,st_type="FF")
+function instate(nq,qub_amp,nc,cav_amp,st_type)
 	#Nq = levels in the qubit
 	#qub_amp = amplitude vector of qubit state
 	#Nc = levels in the cavity
 	#st_type = type of state to be prepared. Fock-Fock by default
-	#ca_amp = amplitude vector of cavity state/a scalar alpha if coherence state
+	#cav_amp = amplitude vector of cavity state/a scalar alpha if coherence state
     q_basis = FockBasis(nq)
     c_basis = FockBasis(nc)
-    if(st_type=="FF")
+    if (st_type=="FF")
         ψ0 = Ket(q_basis, qub_amp) ⊗ fockstate(c_basis,cav_amp)
-    elseif(st_type == "FC")
+    elseif (st_type == "FC")
         ψ0 = Ket(q_basis, qub_amp) ⊗ coherentstate(c_basis,cav_amp)
+	else
+		error("Basis not found")
     end
     return q_basis, c_basis, ψ0
 end
@@ -38,11 +40,11 @@ end
 function define_params_transverse()
     par = param_list()
     par.nq = 4
-    par.nc = 40
-    par.qub_amp=[0,1,0,0]
-    par.t = 1000
+    par.nc = 10
+    par.qub_amp=[0,1,0,0,0]    #size needs to be nq+1
+    par.t = 100
     par.ts = 20
-    par.t_cutoff = 800
+    par.t_cutoff = 80
 
     par.ωq = 4.47 * 2*pi       # qubit freq
 	par.ωc = 7.415 * 2*pi       # cavity freq
@@ -50,27 +52,26 @@ function define_params_transverse()
 	#par.ωd = 7.4218*2.0*np.pi       # drive freq FOR QB IN GROUND STATE
 	par.ah = 0.211 * 2*pi      #qubit anharmonicity
 	par.g = 0.163 * 2*pi     # qubit cavity coupling const
-	par.A1 = sqrt(2) * (0.1*1.4/27) * 2*pi      # drive amplitude
+	par.A = sqrt(2) * (0.1*1.4/27) * 2*pi      # drive amplitude
 
-	if kappa_on:
+	if kappa_on
 		par.κc = 0.0014 * 2*pi #cavity linewidth
-	else:
+	else
 		par.κc = 0.0 * 2*pi #cavity linewidth
-
+	end
 	par.κq = 0 *2*pi #qubit linewidth
 	par.ϕ = 0
-	print(par)
 	return par
 end
 
 function define_params_longitudinal()
     par = param_list()
     par.nq = 4
-    par.nc = 40
-    par.qub_amp=[0,1,0,0]
-    par.t = 100
+    par.nc = 10
+    par.qub_amp=[0,1,0,0,0]    #size needs to be nq+1
+    par.t = 1000
     par.ts = 20
-    par.t_cutoff = 80
+    par.t_cutoff = 800
 
     par.ωq = 4.47 * 2*pi       # qubit freq
 	par.ωc = 7.415 * 2*pi       # cavity freq
@@ -79,15 +80,30 @@ function define_params_longitudinal()
 	par.ωd = 7.4135995 * 2*pi       # drive freq FOR QB IN EXCITED STATE
 	par.ah = 0.211 * 2*pi      #qubit anharmonicity
 	par.g = 0.0014 * 2*pi     # qubit cavity coupling const
-	par.A1 = 0.0061 * 2*pi      # drive amplitude
+	par.A = 0.0061 * 2*pi      # drive amplitude
 
-	if kappa_on:
+	if kappa_on
 		par.κc = 0.0014 * 2*pi #cavity linewidth
-	else:
+	else
 		par.κc = 0.0 * 2*pi #cavity linewidth
-
+	end
 	par.κq = 0 *2*pi #qubit linewidth
 	par.ϕ = 0
-	print(par)
 	return par
+end
+
+function ket2dm(t, psi)
+    return dm(psi)
+end
+
+function mc_evol()
+    t_tmp, ρ_avg = timeevolution.mcwf_dynamic(tlist, ψ0, H; fout=ket2dm, maxiters = 1e7)
+    for i = 1:Ntrajectories-1
+        t_tmp, ρ_temp = timeevolution.mcwf_dynamic(tlist, ψ0, H; fout=ket2dm, maxiters = 1e7)
+        ρ_avg = ρ_avg + ρ_temp
+        println("$i th iteration complete")
+    end
+
+    ρ_avg = ρ_avg./Ntrajectories
+    return ρ_avg
 end

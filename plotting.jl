@@ -1,36 +1,45 @@
 using QuantumOptics
 using JLD2
 using PyPlot
+using QuantumOptics, DifferentialEquations, JLD2, SharedArrays, Parameters
+include("aux.jl")
+drive_on = true	 #-- switch for starting in a coherent state, otherwise default is vacuum
+kappa_on = true  #-- switch decay on or off
+coupling_type = 3  #-- 1-(Xq)*(Xc), 2-(Npq)*(Npc), 3-(Xq*Xq)*(Xc*Xc)
 
-function basis_gen(Nq,Nc)
-    q_basis = FockBasis(Nq)
-    c_basis = FockBasis(Nc)
-    return q_basis, c_basis
+if (coupling_type == 1)
+    println("Transverse chosen")
+    par = define_params_transverse()
+elseif (coupling_type == 2 || coupling_type == 3 || coupling_type == 4 || coupling_type == 5)
+    println("Longitudinal chosen")
+    par = define_params_longitudinal()
+    print(par)
+else
+    error("coupling_type not found")
 end
 
-nq = 5
-nc = 9
-q_basis, c_basis = basis_gen(nq,nc)
+if (drive_on == false)
+    println("Initial state is Fock-Coherent")
+    par.cav_amp = sqrt(13) #α
+    q_basis, c_basis, ψ0 = instate(par.nq,par.qub_amp,par.nc,par.cav_amp,"FC")
+else
+    println("Initial state is Fock-Fock")
+    q_basis, c_basis, ψ0 = instate(par.nq,par.qub_amp,par.nc,par.cav_amp,"FF")
+end
 
-aq = destroy(q_basis) ⊗ identityoperator(c_basis)    # qubit annihilation op
-ac = identityoperator(q_basis) ⊗ destroy(c_basis)    # cavity annihilation op
+include("ham_def.jl")
 
-Iqc = identityoperator(q_basis) ⊗ identityoperator(c_basis) # Identity operator
-
-Xq = (aq + dagger(aq)); Yq = -1*im*(aq - dagger(aq)); Zq = (Iqc - 2*dagger(aq)*aq); Npq = dagger(aq)*aq;
-Xc = (ac + dagger(ac)); Yc = -1*im*(ac - dagger(ac)); Zc = (Iqc - 2*dagger(ac)*ac); Npc = dagger(ac)*ac;
-T = 0:0.01:100
-
-#@load "/home/vamsi/Github/cavity_qubit_system/data 5,9,100.0.jld2" exp_nc_average
-
-file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 5,9,100.0.jld2", "r")
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/Data/data 5,9,100.0.jld2", "r")
 ρ_avg = file["ρ_avg"]
 exp_nc_1 = real(expect(Npc,ρ_avg))
 pygui(true)
 figure()
-plot(T, exp_nc_1, label="700")
+plot(exp_nc_1, label="700")
 grid("on")
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Photon number}")
 #title("5,49")
 #legend(loc="upper left")
+@save "data_test.jld2" (ρ_avg).data
+
+typeof(ρ_avg)
