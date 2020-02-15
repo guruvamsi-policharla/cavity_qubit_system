@@ -6,16 +6,6 @@ end
 @everywhere using QuantumOptics, DifferentialEquations, JLD2, SharedArrays
 
 @everywhere function instate(Nq,q_state_amp,Nc)
-#Nq = levels in the qubit
-#state_amp = amplitudes of the state
-#Nc = levels in the cavity
-    #=
-    if mod(Nq,2) == 0
-        q_basis = SpinBasis((Nq-1) // 2)
-    else
-        q_basis = SpinBasis((Nq-1)/2 // 1)
-    end
-    =#
     q_basis = FockBasis(Nq)
     c_basis = FockBasis(Nc)
     ψ0 = Ket(q_basis, q_state_amp) ⊗ fockstate(c_basis,0)
@@ -28,9 +18,27 @@ end
         H = H0 + -1*A*cos(ωd*t + ϕ)*Xc
     else
         H = H0
+
     end
 
     return H, J, Jdagger
+end
+
+@everywhere function ket2dm(t, psi)
+    return dm(psi)
+end
+
+@everywhere function mc_evol()
+    t_tmp, ρ_avg = timeevolution.mcwf_dynamic(T, ψ0, H; fout=ket2dm)
+    println(typeof(ρ_avg))
+    for i = 1:Ntrajectories-1
+        t_tmp, ρ_temp = timeevolution.mcwf_dynamic(T, ψ0, H; fout=ket2dm)
+        ρ_avg = ρ_avg + ρ_temp
+        println("$i th iteration complete")
+    end
+
+    ρ_avg = ρ_avg./Ntrajectories
+    return ρ_avg
 end
 
 @everywhere nq = 5
@@ -68,33 +76,17 @@ end
 
 @everywhere J = [sqrt(kappa_c)*ac, sqrt(kappa_q)*aq]
 @everywhere Jdagger = dagger.(J)
-#R = [kappa_c,kappa_q]
 @everywhere T = 0:0.01:100
 
-println(Threads.nthreads())
-#@time tout, ρ = timeevolution.master_dynamic(T, ψ0, H)
-#@save "data "*string(nq)*","*string(nc)*","*string(maximum(T))*".jld2" tout ρ T
+@everywhere Ntrajectories = 2
 
-@everywhere Ntrajectories = 10
-exp_nc_average = SharedArray{Float64,1}(length(T))
-
-@time @sync @distributed for i = 1:Ntrajectories
-    t_tmp, ψ = timeevolution.mcwf_dynamic(T, ψ0, H; seed=i)
-    exp_nc_average .+= real(expect(Npc, ψ))
-    println(i,"th seed complete")
+ρ_avg = @time @sync @distributed (+) for i = 1:nworkers()
+    mc_evol()
 end
 
-exp_nc_average ./= Ntrajectories
-_exp_nc = exp_nc_average.s
-@save "data "*string(nq)*","*string(nc)*","*string(maximum(T))*".jld2" _exp_nc Ntrajectories T
-
-f = open("exp_nc_$nq _ $nc.txt", "w")
-write(f, "$_exp_nc")
-close(f)
-
-f = open("tlist_$nq _ $nc.txt", "w")
-write(f, "$T")
-close(f)
+exp_nc = real(expect(Npc,ρ_avg))
 
 rmprocs(workers())
 println("Successfully removed workers")
+
+@save "data "*string(nq)*","*string(nc)*","*string(maximum(T))*".jld2" ρ_avg
