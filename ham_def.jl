@@ -29,11 +29,19 @@ elseif coupling_type==5
 end
 
 H0 = Hq + Hc + Hqc    #time independent part of Hamiltonian
-
-J = [sqrt(par.κc)*ac, sqrt(par.κq)*aq]
+#rates = [par.κc]
+J = [sqrt(par.κc)*ac,sqrt(par.κq)*aq]
 Jdagger = dagger.(J)
 
 function H(t, psi) # time-dependent Hamiltonian
-	H = H0 + -1*par.A*cos(par.ωd*t + par.ϕ)*Xc
-	return H, J, Jdagger
+	if t < par.t_cutoff
+		H = H0 + -1*par.A*cos(par.ωd*t + par.ϕ)*Xc
+		return H, J, Jdagger
+	else
+		return H0, J, Jdagger
+	end
+end
+
+function drive(t)
+	return -1*par.A*cos(par.ωd*t + par.ϕ)
 end

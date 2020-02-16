@@ -1,6 +1,6 @@
 using Distributed
 if (nprocs()==1)
-    addprocs(4)
+    addprocs(1)
 end
 
 @everywhere using QuantumOptics, DifferentialEquations, JLD2, SharedArrays, Parameters
@@ -30,10 +30,14 @@ else
 end
 
 @everywhere include("ham_def.jl")
-@everywhere Ntrajectories = 10
+@everywhere Ntrajectories = 100
 
 ρ_avg = @time @sync @distributed (+) for i = 1:nworkers()
     mc_evol()
 end
 
+ρ_avg = ρ_avg./nworkers()
 @save "data "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*".jld2" ρ_avg tlist
+
+rmprocs(workers())
+println("Successfully removed workers")

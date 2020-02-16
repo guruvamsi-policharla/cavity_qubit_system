@@ -29,17 +29,12 @@ end
 
 include("ham_def.jl")
 
-file = jldopen("/home/vamsi/Github/cavity_qubit_system/Data/data 5,9,100.0.jld2", "r")
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 4,10,100.0.jld2", "r")
 ρ_avg = file["ρ_avg"]
 exp_nc_1 = real(expect(Npc,ρ_avg))
 pygui(true)
 figure()
-plot(exp_nc_1, label="700")
+plot(tlist,exp_nc_1)
 grid("on")
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Photon number}")
-#title("5,49")
-#legend(loc="upper left")
-@save "data_test.jld2" (ρ_avg).data
-
-typeof(ρ_avg)

@@ -39,11 +39,11 @@ end
 
 function define_params_transverse()
     par = param_list()
-    par.nq = 4
-    par.nc = 10
-    par.qub_amp=[0,1,0,0,0]    #size needs to be nq+1
+    par.nq = 3
+    par.nc = 9
+    par.qub_amp=[0,1,0,0]    #size needs to be nq+1
     par.t = 100
-    par.ts = 20
+    par.ts = 0.05
     par.t_cutoff = 80
 
     par.ωq = 4.47 * 2*pi       # qubit freq
@@ -66,12 +66,12 @@ end
 
 function define_params_longitudinal()
     par = param_list()
-    par.nq = 4
-    par.nc = 10
-    par.qub_amp=[0,1,0,0,0]    #size needs to be nq+1
-    par.t = 1000
-    par.ts = 20
-    par.t_cutoff = 800
+    par.nq = 3
+    par.nc = 9
+    par.qub_amp=[0,1,0,0]    #size needs to be nq+1
+    par.t = 100
+    par.ts = 0.05
+    par.t_cutoff = 80
 
     par.ωq = 4.47 * 2*pi       # qubit freq
 	par.ωc = 7.415 * 2*pi       # cavity freq
@@ -93,7 +93,7 @@ function define_params_longitudinal()
 end
 
 function ket2dm(t, psi)
-    return dm(psi)
+    return dm(normalize(psi))
 end
 
 function mc_evol()
