@@ -41,7 +41,3 @@ function H(t, psi) # time-dependent Hamiltonian
 		return H0, J, Jdagger
 	end
 end
-
-function drive(t)
-	return -1*par.A*cos(par.ωd*t + par.ϕ)
-end

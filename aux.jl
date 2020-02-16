@@ -39,12 +39,12 @@ end
 
 function define_params_transverse()
     par = param_list()
-    par.nq = 3
-    par.nc = 9
-    par.qub_amp=[0,1,0,0]    #size needs to be nq+1
-    par.t = 100
+    par.nq = 5
+    par.nc = 49
+    par.qub_amp=[0,1,0,0,0,0]    #size needs to be nq+1
+    par.t = 1000
     par.ts = 0.05
-    par.t_cutoff = 80
+    par.t_cutoff = 800
 
     par.ωq = 4.47 * 2*pi       # qubit freq
 	par.ωc = 7.415 * 2*pi       # cavity freq
@@ -66,12 +66,12 @@ end
 
 function define_params_longitudinal()
     par = param_list()
-    par.nq = 3
-    par.nc = 9
-    par.qub_amp=[0,1,0,0]    #size needs to be nq+1
-    par.t = 100
+    par.nq = 5
+    par.nc = 49
+    par.qub_amp=[0,1,0,0,0,0]    #size needs to be nq+1
+    par.t = 1000
     par.ts = 0.05
-    par.t_cutoff = 80
+    par.t_cutoff = 800
 
     par.ωq = 4.47 * 2*pi       # qubit freq
 	par.ωc = 7.415 * 2*pi       # cavity freq

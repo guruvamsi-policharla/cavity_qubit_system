@@ -1,6 +1,6 @@
 using Distributed
 if (nprocs()==1)
-    addprocs(1)
+    addprocs(20)
 end
 
 @everywhere using QuantumOptics, DifferentialEquations, JLD2, SharedArrays, Parameters
@@ -30,7 +30,7 @@ else
 end
 
 @everywhere include("ham_def.jl")
-@everywhere Ntrajectories = 100
+@everywhere Ntrajectories = 40
 
 ρ_avg = @time @sync @distributed (+) for i = 1:nworkers()
     mc_evol()
