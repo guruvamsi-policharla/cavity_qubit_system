@@ -40,11 +40,31 @@ plot(tlist,exp_nc_1)
 grid("on")
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Photon number}")
+title("nq = 6, nc = 26")
+
+#Cavity Population
+cav_pop = zeros(length(tlist),par.nc+1)
+for i in 0:par.nc
+    cav_pop[:,i+1] = real(expect(identityoperator(q_basis) ⊗ dm(fockstate(c_basis,i)),ρ))
+end
+figure()
+plot(tlist,cav_pop[:,end-2:end])
+xlabel(L"\mathrm{Time}")
+ylabel(L"\mathrm{Cavity \, population}")
+title("nq = 6, nc = 26")
+grid("on")
+legend(labels=["$(par.nc-2)" ,"$(par.nc-1)" ,"$(par.nc)"])
+
 
 #Qubit Population
 qub_pop = zeros(length(tlist),par.nq+1)
 for i in 0:par.nq
-    qub_pop[:,i+1] = qub_0 = real(expect(dm(fockstate(q_basis,i))⊗identityoperator(c_basis),ρ))
+    qub_pop[:,i+1] = real(expect(dm(fockstate(q_basis,i))⊗identityoperator(c_basis),ρ))
 end
 figure()
 plot(tlist,qub_pop)
+xlabel(L"\mathrm{Time}")
+ylabel(L"\mathrm{Qubit \, population}")
+title("nq = 6, nc = 26")
+grid("on")
+legend(labels=["0" ,"1" ,"2", "3" ,"4" ,"5"])

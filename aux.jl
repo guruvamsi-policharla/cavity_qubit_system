@@ -24,7 +24,6 @@ end
             g::Float64 = 0
 			g_trans::Float64 = 0
             A::Float64 = 0
-            κ::Float64 = 0
             κq::Float64 = 0
             κc::Float64 = 0
             ϕ::Float64 = 0
@@ -81,7 +80,8 @@ function define_params_longitudinal()
 	par.ah = 0.211 * 2*pi      #qubit anharmonicity
 	par.g = 0.0014 * 2*pi     # qubit cavity coupling const
 	par.A = 0.0061 * 2*pi      # drive amplitude
-
+	#par.A  = 0.0073 *2*pi      # drive amplitude for about 25 photons in cavity
+	
 	if kappa_on
 		par.κc = 0.0014 * 2*pi #cavity linewidth
 	else
