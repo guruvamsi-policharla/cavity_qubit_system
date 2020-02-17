@@ -29,12 +29,22 @@ end
 
 include("ham_def.jl")
 
-file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 4,10,100.0.jld2", "r")
-ρ_avg = file["ρ_avg"]
-exp_nc_1 = real(expect(Npc,ρ_avg))
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 5,25,1000.0.jld2", "r")
+ρ = file["ρ"]
+
+#Cavity Number
+exp_nc_1 = real(expect(Npc,ρ))
 pygui(true)
 figure()
 plot(tlist,exp_nc_1)
 grid("on")
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Photon number}")
+
+#Qubit Population
+qub_pop = zeros(length(tlist),par.nq+1)
+for i in 0:par.nq
+    qub_pop[:,i+1] = qub_0 = real(expect(dm(fockstate(q_basis,i))⊗identityoperator(c_basis),ρ))
+end
+figure()
+plot(tlist,qub_pop)
