@@ -28,4 +28,11 @@ include("ham_def.jl")
 
 @time tout, ρ = timeevolution.master_dynamic(tlist, ψ0, H; maxiters = 1e7)
 
-@save "data "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*".jld2" ρ tlist
+#--------------------SAVING FILES-----------------------------------------------
+fn = "data "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*".jld2"
+jldopen(fn, true, true, true, IOStream; compress=true) do file
+    file["rho"] = ρ
+    file["tlist"] = tlist
+    file["par"] = par
+end
+close(file)

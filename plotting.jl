@@ -1,7 +1,4 @@
-using QuantumOptics
-using JLD2
-using PyPlot
-using QuantumOptics, DifferentialEquations, JLD2, SharedArrays, Parameters
+using PyPlot,QuantumOptics, DifferentialEquations, JLD2, SharedArrays, Parameters
 include("aux.jl")
 drive_on = true	 #-- switch for starting in a coherent state, otherwise default is vacuum
 kappa_on = true  #-- switch decay on or off
@@ -29,8 +26,9 @@ end
 
 include("ham_def.jl")
 
-file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 5,25,1000.0.jld2", "r")
-ρ = file["ρ"]
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 5,6,10.0.jld2", "r")
+ρ = file["rho"]
+tlist = file["tlist"]
 
 #Cavity Number
 exp_nc_1 = real(expect(Npc,ρ))

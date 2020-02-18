@@ -39,11 +39,11 @@ end
 function define_params_transverse()
     par = param_list()
     par.nq = 5
-    par.nc = 25
+    par.nc = 35
     par.qub_amp=[0,1,0,0,0,0]    #size needs to be nq+1
-    par.t = 100
+    par.t = 1000
     par.ts = 0.2
-    par.t_cutoff = 80
+    par.t_cutoff = 800
 
     par.ωq = 4.47 * 2*pi       # qubit freq
 	par.ωc = 7.415 * 2*pi       # cavity freq
@@ -66,7 +66,7 @@ end
 function define_params_longitudinal()
     par = param_list()
     par.nq = 5
-    par.nc = 25
+    par.nc = 34
     par.qub_amp=[0,1,0,0,0,0]    #size needs to be nq+1
     par.t = 1000
     par.ts = 0.2
@@ -79,9 +79,9 @@ function define_params_longitudinal()
 	par.ωd = 7.4135995 * 2*pi       # drive freq FOR QB IN EXCITED STATE
 	par.ah = 0.211 * 2*pi      #qubit anharmonicity
 	par.g = 0.0014 * 2*pi     # qubit cavity coupling const
-	par.A = 0.0061 * 2*pi      # drive amplitude
-	#par.A  = 0.0073 *2*pi      # drive amplitude for about 25 photons in cavity
-	
+	#par.A = 0.0061 * 2*pi      # drive amplitude
+	par.A  = 0.0073 *2*pi      # drive amplitude for about 25 photons in cavity
+
 	if kappa_on
 		par.κc = 0.0014 * 2*pi #cavity linewidth
 	else
