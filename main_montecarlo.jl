@@ -41,3 +41,12 @@ end
 
 rmprocs(workers())
 println("Successfully removed workers")
+
+#--------------------SAVING FILES-----------------------------------------------
+fn = "data "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*".jld2"
+jldopen(fn, true, true, true, IOStream; compress=true) do file
+    file["rho"] = ρ
+    file["tlist"] = tlist
+    file["par"] = par
+end
+close(file)

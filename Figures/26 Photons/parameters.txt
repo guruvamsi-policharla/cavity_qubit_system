@@ -1,0 +1,23 @@
+Parameters:
+Longitudinal chosen
+param_list
+  ωq: Float64 28.085838323092748
+  ωc: Float64 46.58981905273663
+  ωd: Float64 46.58101945171393
+  ah: Float64 1.3257520998148926
+  g: Float64 0.008796459430051421
+  g_trans: Float64 0.0
+  A: Float64 0.04586725274241098
+  κq: Float64 0.0
+  κc: Float64 0.008796459430051421
+  ϕ: Float64 0.0
+  t: Float64 1000.0
+  ts: Float64 0.2
+  t_cutoff: Float64 800.0
+  qub_amp: Array{Int64}((6,)) [0, 1, 0, 0, 0, 0]
+  cav_amp: Int64 0
+  nq: Int64 5
+  nc: Int64 35
+  coupling_type = 3 : "(-(g/4.0)*(Xq*Xq)*(Xc*Xc))"
+Initial state is Fock-Fock
+

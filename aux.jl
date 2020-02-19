@@ -42,7 +42,7 @@ function define_params_transverse()
     par.nc = 35
     par.qub_amp=[0,1,0,0,0,0]    #size needs to be nq+1
     par.t = 1000
-    par.ts = 0.2
+    par.ts = 0.8
     par.t_cutoff = 800
 
     par.ωq = 4.47 * 2*pi       # qubit freq
@@ -66,7 +66,7 @@ end
 function define_params_longitudinal()
     par = param_list()
     par.nq = 5
-    par.nc = 34
+    par.nc = 6
     par.qub_amp=[0,1,0,0,0,0]    #size needs to be nq+1
     par.t = 1000
     par.ts = 0.2
