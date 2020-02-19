@@ -26,8 +26,8 @@ end
 
 include("ham_def.jl")
 
-file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 5,6,10.0.jld2", "r")
-ρ = file["rho"]
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/Data/26 photon drive/data 5,35,1000.0.jld2", "r")
+ρ = file["ρ"]
 tlist = file["tlist"]
 
 #Cavity Number
@@ -38,7 +38,7 @@ plot(tlist,exp_nc_1)
 grid("on")
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Photon number}")
-title("nq = 6, nc = 26")
+title("nq = $(par.nq), nc = $(par.nc)")
 
 #Cavity Population
 cav_pop = zeros(length(tlist),par.nc+1)
@@ -49,7 +49,7 @@ figure()
 plot(tlist,cav_pop[:,end-2:end])
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Cavity \, population}")
-title("nq = 6, nc = 26")
+title("nq = $(par.nq), nc = $(par.nc)")
 grid("on")
 legend(labels=["$(par.nc-2)" ,"$(par.nc-1)" ,"$(par.nc)"])
 
@@ -63,6 +63,6 @@ figure()
 plot(tlist,qub_pop)
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Qubit \, population}")
-title("nq = 6, nc = 26")
+title("nq = $(par.nq), nc = $(par.nc)")
 grid("on")
 legend(labels=["0" ,"1" ,"2", "3" ,"4" ,"5"])
