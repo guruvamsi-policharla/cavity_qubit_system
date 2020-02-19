@@ -1,4 +1,4 @@
-using QuantumOptics, DifferentialEquations, JLD2, SharedArrays, Parameters
+using QuantumOptics, DifferentialEquations, JLD2, Parameters
 include("aux.jl")
 drive_on = true	 #-- switch for starting in a coherent state, otherwise default is vacuum
 kappa_on = true  #-- switch decay on or off

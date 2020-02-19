@@ -51,8 +51,8 @@ function define_params_transverse()
 	#par.ωd = 7.4218*2.0*np.pi       # drive freq FOR QB IN GROUND STATE
 	par.ah = 0.211 * 2*pi      #qubit anharmonicity
 	par.g = 0.163 * 2*pi     # qubit cavity coupling const
-	par.A = sqrt(2) * (0.1*1.4/27) * 2*pi      # drive amplitude
-
+	par.A = 0.0061 * 2*pi      # drive amplitude
+	#par.A  = 0.0073 *2*pi      # drive amplitude for about 25 photons in cavity
 	if kappa_on
 		par.κc = 0.0014 * 2*pi #cavity linewidth
 	else
