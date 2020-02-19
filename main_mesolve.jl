@@ -30,7 +30,7 @@ include("ham_def.jl")
 @time tout, ρ = timeevolution.master_dynamic(tlist, ψ0, H; maxiters = 1e7)
 
 #--------------------SAVING FILES-----------------------------------------------
-fn = "data "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*".jld2"
+fn = "data "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*","*string(par.A)*".jld2"
 jldopen(fn, true, true, true, IOStream; compress=true) do file
     file["rho"] = ρ
     file["tlist"] = tlist
