@@ -28,7 +28,7 @@ function instate(nq,qub_amp,nc,cav_amp,st_type)
     return q_basis, c_basis, ψ0
 end
 
-file = jldopen("/home/vamsi/Github/cavity_qubit_system/Data/26 photon drive/undersampled_data 5,35,1000.0,0.04586725274241098.jld2", "r")
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/Data/Transverse/24-2/26 Photons/data 5,36,1000.0,0.04900884539600077.jld2", "r")
 rho = file["rho"]
 par = file["par"]
 
@@ -74,9 +74,23 @@ title("nq = $(par.nq), nc = $(par.nc)")
 grid("on")
 legend(labels=["0" ,"1" ,"2", "3" ,"4" ,"5"])
 
-#=
-outfile = "qub_pop_13photons.txt"
+
+outfile = "qub_pop_$(par.nc)_photons.txt"
 f = open(outfile, "w")
 println(f,qub_pop)
 close(f)
-=#
+
+outfile = "cav_pop_$(par.nc)_photons.txt"
+f = open(outfile, "w")
+println(f,cav_pop)
+close(f)
+
+outfile = "parlist_$(par.nc)_photons.txt"
+f = open(outfile, "w")
+println(f,par)
+close(f)
+
+outfile = "pcavavg_$(par.nc)_photons.txt"
+f = open(outfile, "w")
+println(f,exp_nc)
+close(f)

@@ -39,7 +39,7 @@ end
 function define_params_transverse()
     par = param_list()
     par.nq = 5
-    par.nc = 35
+    par.nc = 6
     par.qub_amp=[0,1,0,0,0,0]    #size needs to be nq+1
     par.t = 1000
     par.ts = 0.8
@@ -47,12 +47,12 @@ function define_params_transverse()
 
     par.ωq = 4.47 * 2*pi       # qubit freq
 	par.ωc = 7.415 * 2*pi       # cavity freq
-	par.ωd = 7.4205 * 2*pi       # drive freq FOR QB IN EXCITED STATE
+	par.ωd = 7.4211 * 2*pi       # drive freq FOR QB IN EXCITED STATE
 	#par.ωd = 7.4218*2.0*np.pi       # drive freq FOR QB IN GROUND STATE
 	par.ah = 0.211 * 2*pi      #qubit anharmonicity
 	par.g = 0.163 * 2*pi     # qubit cavity coupling const
-	par.A = 0.0061 * 2*pi      # drive amplitude
-	#par.A  = 0.0073 *2*pi      # drive amplitude for about 25 photons in cavity
+	par.A = 0.0053 * 2*pi      # drive amplitude
+	#par.A  = 0.0078 *2*pi      # drive amplitude for about 25 photons in cavity
 	if kappa_on
 		par.κc = 0.0014 * 2*pi #cavity linewidth
 	else
@@ -96,10 +96,26 @@ function ket2dm(t, psi)
     return dm(normalize(psi))
 end
 
+function ket2dm_qub(t, psi)
+    return ptrace(dm(normalize(psi)),2)
+end
+
 function mc_evol()
     t_tmp, ρ_avg = timeevolution.mcwf_dynamic(tlist, ψ0, H; fout=ket2dm, maxiters = 1e7)
     for i = 1:Ntrajectories-1
         t_tmp, ρ_temp = timeevolution.mcwf_dynamic(tlist, ψ0, H; fout=ket2dm, maxiters = 1e7)
+        ρ_avg = ρ_avg + ρ_temp
+        println("$i th iteration complete")
+    end
+
+    ρ_avg = ρ_avg./Ntrajectories
+    return ρ_avg
+end
+
+function mc_evol_qub()
+    t_tmp, ρ_avg = timeevolution.mcwf_dynamic(tlist, ψ0, H; fout=ket2dm_qub, maxiters = 1e7)
+    for i = 1:Ntrajectories-1
+        t_tmp, ρ_temp = timeevolution.mcwf_dynamic(tlist, ψ0, H; fout=ket2dm_qub, maxiters = 1e7)
         ρ_avg = ρ_avg + ρ_temp
         println("$i th iteration complete")
     end
