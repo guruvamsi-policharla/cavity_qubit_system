@@ -33,8 +33,13 @@ end
 
 @time @sync @distributed for i = 1:Ntrajectories
     t_tmp, rho_qub = timeevolution.mcwf_dynamic(tlist, ψ0, H; fout=ket2dm_qub, maxiters = 1e7)
-    @save "data "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*"_$(i).jld2" rho_qub tlist par
-    display(rho_qub)
+    fn = "data "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*"_$(i).jld2"
+    jldopen(fn, true, true, true, IOStream; compress=true) do file
+        file["rho_qub"] = rho_qub
+        file["tlist"] = tlist
+        file["par"] = par
+    end
+    close(file)
     println("$i th iteration complete")
 end
 
