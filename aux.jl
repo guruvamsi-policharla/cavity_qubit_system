@@ -79,8 +79,8 @@ function define_params_longitudinal()
 	par.ωd = 7.4135995 * 2*pi       # drive freq FOR QB IN EXCITED STATE
 	par.ah = 0.211 * 2*pi      #qubit anharmonicity
 	par.g = 0.0014 * 2*pi     # qubit cavity coupling const
-	#par.A = 0.0061 * 2*pi      # drive amplitude
-	par.A  = 0.0073 *2*pi      # drive amplitude for about 25 photons in cavity
+	par.A = 0.0053 * 2*pi      # drive amplitude
+	#par.A  = 0.0078 *2*pi      # drive amplitude for about 25 photons in cavity
 
 	if kappa_on
 		par.κc = 0.0014 * 2*pi #cavity linewidth
