@@ -33,6 +33,9 @@ H0 = Hq + Hc + Hqc    #time independent part of Hamiltonian
 J = [sqrt(par.κc)*ac,sqrt(par.κq)*aq]
 Jdagger = dagger.(J)
 
+C = [sqrt(par.κc)*ac,sqrt(par.κq)*aq]
+Cdagger = dagger.(C)
+
 function H(t, psi) # time-dependent Hamiltonian
 	if t < par.t_cutoff
 		H = H0 + -1*par.A*cos(par.ωd*t + par.ϕ)*Xc
@@ -40,4 +43,17 @@ function H(t, psi) # time-dependent Hamiltonian
 	else
 		return H0, J, Jdagger
 	end
+end
+
+function Hdeterm(t, psi)
+	if t < par.t_cutoff
+		H = H0 + -1*par.A*cos(par.ωd*t + par.ϕ)*Xc
+		return H, J, Jdagger
+	else
+		return H0, J, Jdagger
+	end
+end
+
+function Hstoch(t,psi)
+	return C, Cdagger
 end
