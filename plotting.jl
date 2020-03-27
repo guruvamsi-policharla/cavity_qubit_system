@@ -28,7 +28,7 @@ function instate(nq,qub_amp,nc,cav_amp,st_type)
     return q_basis, c_basis, ψ0
 end
 
-file = jldopen("/home/vamsi/Github/cavity_qubit_system/data 5,6,1000.0,0.03330088212805181.jld2", "r")
+file = jldopen("/home/vamsi/Github/cavity_qubit_system/data_ats 2,2,9.6,0.03330088212805181.jld2", "r")
 rho = file["rho"]
 par = file["par"]
 
@@ -42,7 +42,7 @@ close(file)
 exp_nc = real(expect(Npc,rho))
 pygui(true)
 figure()
-plot(tlist,exp_nc)
+plot(exp_nc)
 grid("on")
 xlabel(L"\mathrm{Time}")
 ylabel(L"\mathrm{Photon number}")

@@ -26,14 +26,12 @@ else
 end
 
 include("ham_def.jl")
-#@time tout, ρ = timeevolution.master_dynamic(tlist, ψ0, H; maxiters = 1e7)
-#@time tout, ρ = stochastic.master(tlist, ψ0, H0,J,C;dt=1e-5)
-@time tout, ρ = stochastic.master_dynamic(Array(tlist), ψ0, Hdeterm, Hstoch;alg=StochasticDiffEq.LambaEM())
+@time tout, ρ = stochastic.master_dynamic(Array(tlist), ψ0, Hdeterm, Hstoch;alg=StochasticDiffEq.LambaEM(),maxiters=1e12)
 
 #--------------------SAVING FILES-----------------------------------------------
 fn = "data_ats "*string(par.nq)*","*string(par.nc)*","*string(maximum(tlist))*","*string(par.A)*".jld2"
 jldopen(fn, true, true, true, IOStream; compress=true) do file
     file["rho"] = ρ
-    file["tlist"] = tlist
+    file["tlist"] = tout
     file["par"] = par
 end

@@ -39,8 +39,8 @@ end
 function define_params_transverse()
     par = param_list()
     par.nq = 5
-    par.nc = 6
-    par.qub_amp=[0,1,0,0,0,0]    #size needs to be nq+1
+    par.nc = 5
+    par.qub_amp=[0,1,0]    #size needs to be nq+1
     par.t = 1000
     par.ts = 0.8
     par.t_cutoff = 800
